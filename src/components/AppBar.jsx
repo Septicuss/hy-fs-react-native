@@ -3,6 +3,7 @@ import Constants from 'expo-constants';
 import Text from "./Text";
 import theme from "../theme";
 import {Link} from "react-router-native";
+import useSignedIn from "../hook/useSignedIn";
 
 const styles = StyleSheet.create({
 	container: {
@@ -18,25 +19,44 @@ const styles = StyleSheet.create({
 	}
 });
 
-const AppTab = ({name, route}) => (
-		<Link to={route}>
+const AppTab = ({ name, route, onPress }) => {
+	const content = (
 			<View style={styles.tab}>
-				<Text
-						fontSize='subheading'
-						fontWeight='bold'
-				>
+				<Text fontSize="subheading" fontWeight="bold">
 					{name}
 				</Text>
 			</View>
+	)
+
+	if (onPress) {
+		return <>
+			<Pressable onPress={onPress}>
+				{content}
+			</Pressable>
+		</>
+	}
+
+	return <>
+		<Link to={route}>
+			{content}
 		</Link>
-)
+	</>
+}
 
 const AppBar = () => {
+	const {signedIn, signOut} = useSignedIn()
+
 	return <>
 		<View style={styles.container}>
 			<ScrollView horizontal>
 				<AppTab name={"Repositories"} route='/' />
-				<AppTab name={"Sign In"} route='/sign-in' />
+				{signedIn ?
+					<AppTab name={"Sign Out"} onPress={async () => {
+						await signOut()
+					}} />
+				:
+					<AppTab name={"Sign In"} route='/sign-in' />
+				}
 			</ScrollView>
 		</View>
 	</>
