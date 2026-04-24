@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 	}
 })
 
-const Stat = ({name, amount}) => {
+const Stat = ({testID, name, amount}) => {
 	let amountText = amount
 
 	if (amount > 1000) {
@@ -52,7 +52,7 @@ const Stat = ({name, amount}) => {
 	}
 
 	return (
-		<View>
+		<View testID={testID}>
 			<Text fontWeight='bold' style={styles.statCard}>{amountText}</Text>
 			<Text style={styles.statCard}>{name}</Text>
 		</View>
@@ -61,7 +61,7 @@ const Stat = ({name, amount}) => {
 
 const RepositoryItem = ({item}) => {
 	return (
-			<View style={styles.container}>
+			<View testID="repositoryItem" style={styles.container}>
 				<View style={styles.itemHeading}>
 					<View>
 						<Image
@@ -79,10 +79,10 @@ const RepositoryItem = ({item}) => {
 
 
 				<View style={styles.stats}>
-					<Stat name="Stars" amount={item.stargazersCount} />
-					<Stat name="Forks" amount={item.forksCount} />
-					<Stat name="Reviews" amount={item.reviewCount} />
-					<Stat name="Rating" amount={item.ratingAverage} />
+					<Stat testID="stars" name="Stars" amount={item.stargazersCount} />
+					<Stat testID="forks" name="Forks" amount={item.forksCount} />
+					<Stat testID="reviews" name="Reviews" amount={item.reviewCount} />
+					<Stat testID="rating" name="Rating" amount={item.ratingAverage} />
 				</View>
 			</View>
 		)
