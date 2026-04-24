@@ -8,6 +8,9 @@ const styles = StyleSheet.create({
 		backgroundColor: theme.colors.secondary,
 		padding: 20,
 	},
+	containerSingle: {
+		backgroundColor: theme.colors.primary,
+	},
 	itemHeading: {
 		flexDirection: 'row',
 		gap: 20,
@@ -74,7 +77,7 @@ const RepositoryItem = ({item, single = false}) => {
 	}
 
 	return (
-			<View testID="repositoryItem" style={styles.container}>
+			<View testID="repositoryItem" style={[styles.container]}>
 				<View style={styles.itemHeading}>
 					<View>
 						<Image
