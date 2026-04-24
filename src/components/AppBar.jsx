@@ -17,7 +17,6 @@ const AppTab = ({name}) => (
 		<Pressable>
 			<Text
 					fontSize='subheading'
-					color='textSecondary'
 					fontWeight='bold'
 			>
 				{name}

@@ -1,25 +1,89 @@
-import {StyleSheet, View} from "react-native";
+import {Image, StyleSheet, View} from "react-native";
 import Text from "./Text";
+import theme from "../theme";
 
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: 'red',
-		borderRadius: 20,
+		backgroundColor: theme.colors.secondary,
 		padding: 20,
+	},
+	itemHeading: {
+		flexDirection: 'row',
+		gap: 20,
+	},
+	itemHeadingDescription: {
+		gap: 2,
+	},
+	languageCard: {
+		backgroundColor: '#ffffff',
+		padding: 5,
+		borderRadius: 30,
+		alignSelf: 'flex-start',
+		marginTop: 5,
+	},
+	stats: {
+		marginTop: 10,
+		paddingLeft: 30,
+		paddingRight: 30,
+		width: '100%',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		gap: 10,
+	},
+	statCard: {
+		textAlign: 'center'
+	},
+	statCardStat: {
+		textAlign: 'center'
+	},
+	image: {
+		width: 50,
+		height: 50,
+		borderRadius: 10
 	}
 })
+
+const Stat = ({name, amount}) => {
+	let amountText = amount
+
+	if (amount > 1000) {
+		amountText = (Math.round((amount / 1000) * 10) / 10) + 'k '
+	}
+
+	return (
+		<View>
+			<Text fontWeight='bold' style={styles.statCard}>{amountText}</Text>
+			<Text style={styles.statCard}>{name}</Text>
+		</View>
+	)
+}
 
 const RepositoryItem = ({item}) => {
 	return (
 			<View style={styles.container}>
-				<Text fontWeight={"bold"}>Full name: {item.fullName}</Text>
-				<Text>Description: {item.description}</Text>
-				<Text>Language: {item.language}</Text>
-				<Text>Stars: {item.stargazersCount}</Text>
-				<Text>Forks: {item.forksCount}</Text>
-				<Text>Reviews: {item.reviewCount}</Text>
-				<Text>Rating: {item.ratingAverage}</Text>
+				<View style={styles.itemHeading}>
+					<View>
+						<Image
+							style={styles.image}
+							source={{uri: item.ownerAvatarUrl}}
+						/>
+					</View>
+
+					<View style={styles.itemHeadingDescription}>
+						<Text fontWeight="bold" fontSize="subheading">{item.fullName}</Text>
+						<Text color="textSecondary">{item.description}</Text>
+						<Text style={styles.languageCard}>{item.language}</Text>
+					</View>
+				</View>
+
+
+				<View style={styles.stats}>
+					<Stat name="Stars" amount={item.stargazersCount} />
+					<Stat name="Forks" amount={item.forksCount} />
+					<Stat name="Reviews" amount={item.reviewCount} />
+					<Stat name="Rating" amount={item.ratingAverage} />
+				</View>
 			</View>
 		)
 }
