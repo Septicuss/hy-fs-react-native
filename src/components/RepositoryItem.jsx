@@ -1,4 +1,4 @@
-import {Image, StyleSheet, View} from "react-native";
+import {Image, Linking, Pressable, StyleSheet, View} from "react-native";
 import Text from "./Text";
 import theme from "../theme";
 
@@ -41,6 +41,13 @@ const styles = StyleSheet.create({
 		width: 50,
 		height: 50,
 		borderRadius: 10
+	},
+	button: {
+		height: 40,
+		borderRadius: 5,
+		backgroundColor: theme.colors.primary,
+		justifyContent: "center",
+		alignItems: "center",
 	}
 })
 
@@ -59,7 +66,13 @@ const Stat = ({testID, name, amount}) => {
 	)
 }
 
-const RepositoryItem = ({item}) => {
+const RepositoryItem = ({item, single = false}) => {
+
+	const handleOpenUrl = async () => {
+		if (item.url)
+			await Linking.openURL(item.url)
+	}
+
 	return (
 			<View testID="repositoryItem" style={styles.container}>
 				<View style={styles.itemHeading}>
@@ -84,6 +97,12 @@ const RepositoryItem = ({item}) => {
 					<Stat testID="reviews" name="Reviews" amount={item.reviewCount} />
 					<Stat testID="rating" name="Rating" amount={item.ratingAverage} />
 				</View>
+
+				{single &&
+					<Pressable style={styles.button} onPress={handleOpenUrl}>
+						<Text>Open in GitHub</Text>
+					</Pressable>
+				}
 			</View>
 		)
 }
