@@ -51,9 +51,12 @@ const AppBar = () => {
 			<ScrollView horizontal>
 				<AppTab name={"Repositories"} route='/' />
 				{signedIn ?
-					<AppTab name={"Sign Out"} onPress={async () => {
-						await signOut()
-					}} />
+					<>
+						<AppTab name={"Create a review"} route='/create-review' />
+						<AppTab name={"Sign Out"} onPress={async () => {
+							await signOut()
+						}} />
+					</>
 				:
 					<AppTab name={"Sign In"} route='/sign-in' />
 				}

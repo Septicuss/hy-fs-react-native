@@ -43,7 +43,9 @@ export const SignInContainer = ({onSubmit}) => {
 			password: ''
 		},
 		validationSchema: signInSchema,
-		onSubmit,
+		onSubmit: (values) => {
+			onSubmit(values)
+		},
 	})
 
 	const usernameError = formik.touched.username && formik.errors.username
@@ -103,7 +105,7 @@ const SignIn = () => {
 		}
 	}
 
-	return <SignInContainer onSubmit={onSubmit()} />
+	return <SignInContainer onSubmit={onSubmit} />
 };
 
 export default SignIn;
