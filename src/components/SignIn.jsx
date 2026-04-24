@@ -36,31 +36,18 @@ const styles = StyleSheet.create({
 	}
 })
 
-const SignIn = () => {
-	const navigate = useNavigate()
-	const [signIn] = useSignIn();
+export const SignInContainer = ({onSubmit}) => {
 	const formik = useFormik({
 		initialValues: {
 			username: '',
 			password: ''
 		},
 		validationSchema: signInSchema,
-		onSubmit: async (values) => {
-			const { username, password } = values;
-			try {
-				if (await signIn({ username, password })) {
-					console.log("successfully signed in")
-					navigate('/')
-				}
-			} catch (e) {
-				console.log(e);
-			}
-		}
+		onSubmit,
 	})
 
 	const usernameError = formik.touched.username && formik.errors.username
 	const passwordError = formik.touched.password && formik.errors.password
-	const anyError = usernameError || passwordError
 
 	return <>
 		<View style={styles.container}>
@@ -68,11 +55,11 @@ const SignIn = () => {
 				Sign in
 			</Text>
 			<TextInput
-				style={[styles.input, (usernameError && {borderColor: 'red'})]}
-				placeholder='Username'
-				value={formik.values.username}
-				onChangeText={formik.handleChange('username')}
-				onBlur={formik.handleBlur('username')}
+					style={[styles.input, (usernameError && {borderColor: 'red'})]}
+					placeholder='Username'
+					value={formik.values.username}
+					onChangeText={formik.handleChange('username')}
+					onBlur={formik.handleBlur('username')}
 			/>
 			{usernameError && (
 					<Text style={{ color: 'red' }}>{formik.errors.username}</Text>
@@ -88,7 +75,7 @@ const SignIn = () => {
 			{passwordError && formik.errors.password && (
 					<Text style={{ color: 'red' }}>{formik.errors.password}</Text>
 			)}
-			<Pressable style={styles.button} onPress={formik.handleSubmit}>
+			<Pressable role="button" style={styles.button} onPress={formik.handleSubmit}>
 				<Text
 						fontWeight='bold'
 						color='white'
@@ -98,6 +85,25 @@ const SignIn = () => {
 			</Pressable>
 		</View>
 	</>;
+}
+
+const SignIn = () => {
+	const navigate = useNavigate()
+	const [signIn] = useSignIn();
+
+
+	const onSubmit = async ({username, password}) => {
+		try {
+			if (await signIn({ username, password })) {
+				console.log("successfully signed in")
+				navigate('/')
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
+	return <SignInContainer onSubmit={onSubmit()} />
 };
 
 export default SignIn;
