@@ -1,4 +1,4 @@
-import {Platform} from "react-native";
+import {Platform, StyleSheet} from "react-native";
 
 const theme = {
 	colors: {
@@ -23,5 +23,26 @@ const theme = {
 		bold: '700',
 	},
 };
+
+export const formStyles = StyleSheet.create({
+	container: {
+		padding: 5,
+		gap: 10,
+	},
+	input: {
+		height: 40,
+		borderColor: 'black',
+		borderWidth: 1,
+		paddingHorizontal: 10,
+		borderRadius: 5,
+	},
+	button: {
+		height: 40,
+		borderRadius: 5,
+		backgroundColor: theme.colors.primary,
+		justifyContent: "center",
+		alignItems: "center",
+	}
+})
 
 export default theme;

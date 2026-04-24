@@ -2,7 +2,7 @@ import * as yup from "yup";
 import {useFormik} from "formik";
 import Text from "./Text";
 import {Pressable, StyleSheet, TextInput, View} from "react-native";
-import theme from "../theme";
+import {formStyles} from "../theme";
 import {CREATE_REVIEW} from "../graphql/mutations";
 import {useMutation} from "@apollo/client/react";
 import {useNavigate} from "react-router-native";
@@ -21,27 +21,6 @@ const reviewSchema = yup.object().shape({
 			.required(),
 	review: yup
 			.string()
-})
-
-const styles = StyleSheet.create({
-	container: {
-		padding: 5,
-		gap: 10,
-	},
-	input: {
-		height: 40,
-		borderColor: 'black',
-		borderWidth: 1,
-		paddingHorizontal: 10,
-		borderRadius: 5,
-	},
-	button: {
-		height: 40,
-		borderRadius: 5,
-		backgroundColor: theme.colors.primary,
-		justifyContent: "center",
-		alignItems: "center",
-	}
 })
 
 const ReviewForm = () => {
@@ -80,14 +59,14 @@ const ReviewForm = () => {
 	}
 
 	return (
-			<View style={styles.container}>
+			<View style={formStyles.container}>
 				<Text fontWeight='bold' fontSize='subheading'>
 					Create review
 				</Text>
 
 				<View>
 					<TextInput
-							style={[styles.input, (error.repositoryOwner && {borderColor: 'red'})]}
+							style={[formStyles.input, (error.repositoryOwner && {borderColor: 'red'})]}
 							placeholder='Repository owner name'
 							value={formik.values.repositoryOwner}
 							onChangeText={formik.handleChange('repositoryOwner')}
@@ -100,7 +79,7 @@ const ReviewForm = () => {
 
 				<View>
 					<TextInput
-							style={[styles.input, (error.repositoryName && {borderColor: 'red'})]}
+							style={[formStyles.input, (error.repositoryName && {borderColor: 'red'})]}
 							placeholder='Repository name'
 							value={formik.values.repositoryName}
 							onChangeText={formik.handleChange('repositoryName')}
@@ -113,7 +92,7 @@ const ReviewForm = () => {
 
 				<View>
 					<TextInput
-							style={[styles.input, (error.rating && {borderColor: 'red'})]}
+							style={[formStyles.input, (error.rating && {borderColor: 'red'})]}
 							placeholder='Rating between 0 and 100'
 							value={formik.values.rating}
 							onChangeText={formik.handleChange('rating')}
@@ -126,7 +105,7 @@ const ReviewForm = () => {
 
 				<View>
 					<TextInput
-							style={[styles.input, {height: 70}, (error.review && {borderColor: 'red'})]}
+							style={[formStyles.input, {height: 70}, (error.review && {borderColor: 'red'})]}
 							placeholder='Review'
 							value={formik.values.review}
 							onChangeText={formik.handleChange('review')}
@@ -138,7 +117,7 @@ const ReviewForm = () => {
 					)}
 				</View>
 
-				<Pressable role="button" style={styles.button} onPress={formik.handleSubmit}>
+				<Pressable role="button" style={formStyles.button} onPress={formik.handleSubmit}>
 					<Text
 							fontWeight='bold'
 							color='white'
