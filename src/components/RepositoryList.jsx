@@ -1,21 +1,36 @@
-import {FlatList, View, StyleSheet, Pressable} from 'react-native';
+import {FlatList, Pressable, StyleSheet, TextInput, View} from 'react-native';
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hook/useRepositories";
 import {useNavigate} from "react-router-native";
-import {useState} from "react";
-import Text from "./Text";
+import {useEffect, useState} from "react";
 import {Picker} from "@react-native-picker/picker";
+import {useDebounce} from "use-debounce";
 
 const styles = StyleSheet.create({
 	separator: {
 		height: 10,
 	},
+	search: {
+		borderWidth: 1,
+		borderRadius: 15,
+		height: 50,
+		paddingHorizontal: 10,
+		marginLeft: 10,
+		marginRight: 10
+	}
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListHeader = ({handleChangeOrdering}) => {
+export const RepositoryListHeader = ({handleChangeOrdering, handleChangeSearch}) => {
 	const [orderingType, setOrderingType] = useState('latest')
+	const [search, setSearch] = useState('')
+	const [searchValue] = useDebounce(search, 300)
+
+	useEffect(() => {
+		handleChangeSearch(searchValue)
+	}, [searchValue])
+
 	const orderingTypes = [
 		{id: 'latest', label: 'Latest repositories'},
 		{id: 'highest_rated', label: 'Highest rated repositories'},
@@ -24,6 +39,12 @@ export const RepositoryListHeader = ({handleChangeOrdering}) => {
 
 	return (
 			<>
+				<TextInput
+					style={styles.search}
+					value={search}
+					onChangeText={(text) => setSearch(text)}
+					placeholder={'Search'}
+				/>
 				<Picker
 					selectedValue={orderingType}
 					onValueChange={(itemValue) => {
@@ -39,7 +60,7 @@ export const RepositoryListHeader = ({handleChangeOrdering}) => {
 	)
 }
 
-export const RepositoryListContainer = ({ repositories, pressRepository, loading, handleChangeOrdering }) => {
+export const RepositoryListContainer = ({ repositories, pressRepository, loading, handleChangeSearch, handleChangeOrdering }) => {
 	const repositoryNodes = repositories
 			? repositories.edges.map(edge => edge.node)
 			: [];
@@ -48,7 +69,10 @@ export const RepositoryListContainer = ({ repositories, pressRepository, loading
 			<FlatList
 					data={repositoryNodes}
 					ItemSeparatorComponent={ItemSeparator}
-					ListHeaderComponent={<RepositoryListHeader handleChangeOrdering={handleChangeOrdering} />}
+					ListHeaderComponent={<RepositoryListHeader
+							handleChangeOrdering={handleChangeOrdering}
+							handleChangeSearch={handleChangeSearch}
+					/>}
 					renderItem={({item}) => {
 
 						if (loading)
@@ -67,11 +91,11 @@ export const RepositoryListContainer = ({ repositories, pressRepository, loading
 }
 
 const RepositoryList = () => {
-	const [ordering, setOrdering] = useState({
+	const [searchOptions, setSearchOptions] = useState({
 		orderBy: 'CREATED_AT',
 		orderDirection: 'DESC'
 	})
-	const { repositories, loading } = useRepositories({...ordering})
+	const { repositories, loading } = useRepositories({...searchOptions})
 	const navigate = useNavigate()
 
 	const pressRepository = async (repository) => {
@@ -80,22 +104,23 @@ const RepositoryList = () => {
 
 	// 'latest','highest rated', 'lowest rated'
 	const handleChangeOrdering = (orderingType) => {
-		console.log('setting to', orderingType)
 		switch (orderingType.toLowerCase()) {
 			case 'latest':
-				setOrdering({orderBy: 'CREATED_AT', orderDirection: 'DESC'})
+				setSearchOptions({...searchOptions, orderBy: 'CREATED_AT', orderDirection: 'DESC'})
 				break
 			case 'highest_rated':
-				setOrdering({orderBy: 'RATING_AVERAGE', orderDirection: 'DESC'})
+				setSearchOptions({...searchOptions, orderBy: 'RATING_AVERAGE', orderDirection: 'DESC'})
 				break
 			case 'lowest_rated':
-				setOrdering({orderBy: 'RATING_AVERAGE', orderDirection: 'ASC'})
+				setSearchOptions({...searchOptions, orderBy: 'RATING_AVERAGE', orderDirection: 'ASC'})
 				break
 			default:
 				break
 		}
-		console.log(' result:',ordering)
+	}
 
+	const handleChangeSearch = (search) => {
+		setSearchOptions({...searchOptions, search: search})
 	}
 
 	return <RepositoryListContainer
@@ -103,6 +128,7 @@ const RepositoryList = () => {
 			loading={loading}
 			pressRepository={pressRepository}
 			handleChangeOrdering={handleChangeOrdering}
+			handleChangeSearch={handleChangeSearch}
 	/>
 };
 
