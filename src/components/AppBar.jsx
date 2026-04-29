@@ -53,6 +53,7 @@ const AppBar = () => {
 				{signedIn ?
 					<>
 						<AppTab name={"Create a review"} route='/create-review' />
+						<AppTab name={"My reviews"} route='/my-reviews' />
 						<AppTab name={"Sign Out"} onPress={async () => {
 							await signOut()
 						}} />

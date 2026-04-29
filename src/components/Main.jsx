@@ -6,6 +6,7 @@ import SignIn from "./SignIn";
 import RepositoryPage from "./RepositoryPage";
 import ReviewForm from "./ReviewForm";
 import SignUp from "./SignUp";
+import MyReviewsPage from "./MyReviewsPage";
 
 
 const styles = StyleSheet.create({
@@ -24,6 +25,7 @@ const Main = () => {
 					<Route path="/sign-in" element={<SignIn />}/>
 					<Route path="/sign-up" element={<SignUp />}/>
 					<Route path="/create-review" element={<ReviewForm />}/>
+					<Route path="/my-reviews" element={<MyReviewsPage />}/>
 					<Route path="/repository/:repositoryId" element={<RepositoryPage />}/>
 					<Route path="*" element={<Navigate to="/" replace />}/>
 				</Routes>
